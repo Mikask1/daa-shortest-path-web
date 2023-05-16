@@ -1,30 +1,4 @@
-grid_map = [
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0],
-  [0, 2, 1, 1, 1, 1, 0, 0, 0, 1, 0],
-  [0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0],
-  [0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0],
-  [0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0],
-  [0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0],
-  [0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0],
-  [0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0],
-  [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-  [0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0],
-  [0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0],
-  [0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0],
-  [0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0],
-  [0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0],
-  [0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0],
-  [0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0],
-  [0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0],
-  [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-  [0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-  [0, 1, 1, 1, 1, 1, 1, 1, 1, 3, 0],
-  [0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0],
-  [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-  [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-];
+const Map = require('./map');
 
 // Euclidean distance
 function heuristic(node, goal) {
@@ -58,16 +32,16 @@ function astarSearch(startNode, goalNode) {
     }
 
     // Tandai node di closed list menjadi -1
-    grid_map[currentNode[0]][currentNode[1]] = 5;
+    Map.grid_map[currentNode[0]][currentNode[1]] = Map.explored;
 
     // Tandai node di open list menjadi 4
     for (const [priority, node] of frontier) {
-      grid_map[node[0]][node[1]] = 4;
+      Map.grid_map[node[0]][node[1]] = Map.open;
     }
 
-    // Log perubahan grid_map
+    // Log perubahan Map.grid_map
     // console.log("Grid Map:");
-    // console.log(grid_map);
+    // console.log(Map.grid_map);
   }
 
   const path = [];
@@ -81,7 +55,7 @@ function astarSearch(startNode, goalNode) {
 
   // Tandai path menjadi -2
   for (const node of path) {
-    grid_map[node[0]][node[1]] = -2;
+    Map.grid_map[node[0]][node[1]] = Map.shortest;
   }
 
   return path;
@@ -92,20 +66,20 @@ function getNeighbors(node) {
   const neighbors = [];
 
   // Tambah node di atas sbg neighbor
-  if (x > 0 && grid_map[x - 1][y] !== 0) {
+  if (x > 0 && Map.grid_map[x - 1][y] !== 0) {
     neighbors.push([x - 1, y]);
   }
 
   // Tambah node di bawah sbg neighbor
-  if (x < grid_map.length - 1 && grid_map[x + 1][y] !== 0) {
+  if (x < Map.grid_map.length - 1 && Map.grid_map[x + 1][y] !== 0) {
     neighbors.push([x + 1, y]);
   }
   // Tambah node di kiri sbg neighbor
-  if (y > 0 && grid_map[x][y - 1] !== 0) {
+  if (y > 0 && Map.grid_map[x][y - 1] !== 0) {
     neighbors.push([x, y - 1]);
   }
   // Tambah node di kanan sbg neighbor
-  if (y < grid_map[x].length - 1 && grid_map[x][y + 1] !== 0) {
+  if (y < Map.grid_map[x].length - 1 && Map.grid_map[x][y + 1] !== 0) {
     neighbors.push([x, y + 1]);
   }
 

@@ -31,6 +31,9 @@ class Map {
 	static wall = 0;
 	static start = 2;
 	static goal = 3;
+	static open = 4;
 	static explored = -1;
 	static shortest = -2;
 }
+
+module.exports = Map
