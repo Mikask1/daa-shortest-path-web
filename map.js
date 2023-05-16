@@ -34,6 +34,7 @@ class Map {
 	static open = 4;
 	static explored = -1;
 	static shortest = -2;
+	static startCoord = [2, 1];
+	static xLength = this.grid_map[0].length;
+	static yLength = this.grid_map.length;
 }
-
-module.exports = Map

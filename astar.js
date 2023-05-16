@@ -1,5 +1,3 @@
-const Map = require('./map');
-
 // Euclidean distance
 function heuristic(node, goal) {
   const [x1, y1] = node;
@@ -95,4 +93,3 @@ const startNode = [2, 1];
 const goalNode = [20, 9];
 
 const path = astarSearch(startNode, goalNode);
-console.log("Path:", path);
