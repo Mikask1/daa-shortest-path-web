@@ -1,6 +1,6 @@
-const map = Map.grid_map;
+let map = [];
 
-const queue = [];
+let queue = [];
 let parent = { [[2, 1]]: null };
 
 // Start Node
@@ -44,7 +44,15 @@ function checkNeighbor(coord, parentCoord) {
 }
 
 async function run() {
-	let goalCoord = [];
+	map = JSON.parse(JSON.stringify(Map.grid_map));
+	queue = [];
+	parent = { [[2, 1]]: null };
+
+	// Start Node
+	queue.push([2, 1]);
+	goalCoord = [];
+
+	await render(map);
 	while (queue.length) {
 		const currCoord = queue.shift();
 		const currValue = map[currCoord[0]][currCoord[1]];
@@ -61,12 +69,21 @@ async function run() {
 	}
 
 	map[Map.startCoord[0]][Map.startCoord[1]] = Map.start;
+	running = false;
 	return goalCoord;
 }
 
-async function getShortestPath() {
+async function getShortestPathBFS() {
+	var btns = document.getElementsByClassName("btn-fancy");
+
+	for (var i = 0; i < btns.length; i++) {
+		btns[i].disabled = true;
+	}
+
+	document.getElementById("shortest-type").innerText = "BFS";
 	let path = [];
 	const goalCoord = await run();
+
 	let currCoord = goalCoord;
 	while (currCoord) {
 		path.push(currCoord);
@@ -76,20 +93,14 @@ async function getShortestPath() {
 	// Tandai path menjadi -2
 	for (const coord of path) {
 		map[coord[0]][coord[1]] = Map.shortest;
+		await render(map);
 	}
 
 	map[goalCoord[0]][goalCoord[1]] = Map.goal;
 	map[Map.startCoord[0]][Map.startCoord[1]] = Map.start;
 	await render(map);
-}
 
-function printMap() {
-	for (let index = 0; index < yLength; index++) {
-		for (let indexs = 0; indexs < xLength; indexs++) {
-			process.stdout.write(`${map[index][indexs]}\t`);
-		}
-		console.log("");
+	for (var i = 0; i < btns.length; i++) {
+		btns[i].disabled = false;
 	}
 }
-
-getShortestPath();

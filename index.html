@@ -12,11 +12,118 @@
 			crossorigin="anonymous"
 			referrerpolicy="no-referrer"
 		></script>
-		<script src="./visualize.js" defer></script>
-        <script src="./bfs.js" defer></script>
-		<link rel="stylesheet" href="index.css" type="text/css"/>
+		<script src="./render.js" defer></script>
+		<script src="./bfs.js" defer></script>
+		<script src="./astar.js" defer></script>
+		<!-- <link rel="stylesheet" href="index.css" type="text/css" /> -->
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"
+			integrity="sha512-wnea99uKIC3TJF7v4eKk4Y+lMz2Mklv18+r4na2Gn1abDRPPOeef95xTzdwGD9e6zXJBteMIhZ1+68QC5byJZw=="
+			crossorigin="anonymous"
+			referrerpolicy="no-referrer"
+		/>
 	</head>
+	<style>
+		.title {
+			font-weight: 700;
+			font-size: 1.875rem;
+		}
+		.layout {
+			max-width: 90%;
+			margin: 0 auto;
+		}
+
+		/* CSS */
+		.btn-fancy {
+			--b: 3px; /* border thickness */
+			--s: 0.45em; /* size of the corner */
+			--color: #373b44;
+
+			padding: calc(0.5em + var(--s)) calc(0.9em + var(--s));
+			color: var(--color);
+			--_p: var(--s);
+			background: conic-gradient(
+					from 90deg at var(--b) var(--b),
+					#0000 90deg,
+					var(--color) 0
+				)
+				var(--_p) var(--_p) / calc(100% - var(--b) - 2 * var(--_p))
+				calc(100% - var(--b) - 2 * var(--_p));
+			transition: 0.3s linear, color 0s, background-color 0s;
+			outline: var(--b) solid #0000;
+			outline-offset: 0.6em;
+			font-size: 16px;
+			min-width: 10rem;
+			border: 0;
+
+			user-select: none;
+			-webkit-user-select: none;
+			touch-action: manipulation;
+		}
+
+		.btn-fancy:hover,
+		.btn-fancy:focus-visible {
+			--_p: 0px;
+			outline-color: var(--color);
+			outline-offset: 0.05em;
+		}
+
+		.btn-fancy:active {
+			background: var(--color);
+			color: #fff;
+		}
+
+		.btn-fancy:disabled {
+			background: var(--color);
+			color: #fff;
+		}
+	</style>
 	<body>
-		<div id="map"></div>
+		<main class="grid grid-cols-2 min-h-screen">
+			<section class="layout flex flex-col items-center gap-10 justify-center h-full">
+				<section class="mt-4">
+					<h1 class="title text-center mb-2">Shortest Path</h1>
+					<div class="flex justify-center gap-4">
+						<button
+							class="btn-fancy"
+							onclick="getShortestPathBFS()"
+						>
+							BFS
+						</button>
+						<button class="btn-fancy">DFS</button>
+						<button class="btn-fancy" onclick="astarSearch()">
+							A*
+						</button>
+					</div>
+				</section>
+				<section class="mt-4 flex flex-col justify-center items-center w-full">
+					<h1 class="title text-center mb-2">Animation Speed</h1>
+					<p id="speed-value">Speed = 30</p>
+					<div class="flex justify-center gap-2 w-full">
+						<label for="speed">10</label>
+						<input
+							name="speed"
+							type="range"
+							min="10"
+							max="300"
+							value="30"
+							class="w-full"
+							onchange="setSpeed(this.value)"
+						/>
+						<label for="speed">300</label>
+					</div>
+				</section>
+			</section>
+			<div
+				class="flex flex-col justify-center items-center h-full gap-2 border-l border border-black"
+			>
+				<span class="text-center">
+					<h1 class="title">Grid Map</h1>
+					<p id="shortest-type">None</p>
+				</span>
+				<section id="map" class="bg-black p-2 m-0"></section>
+			</div>
+		</main>
 	</body>
 </html>

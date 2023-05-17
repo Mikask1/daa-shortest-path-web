@@ -2,12 +2,13 @@ function sleep(ms) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+let speed = 30
 async function render(map) {
 	d3.select("#map")
 		.html("")
 		.append("svg")
-		.attr("width", Map.xLength * 20)
-		.attr("height", Map.yLength * 20)
+		.attr("width", Map.xLength * 30)
+		.attr("height", Map.yLength * 30)
 		.selectAll("rect")
 		.data(map)
 		.enter()
@@ -19,13 +20,13 @@ async function render(map) {
 		.enter()
 		.append("rect")
 		.attr("x", function (d, i) {
-			return i * 20;
+			return i * 30;
 		})
 		.attr("y", function (d, i, j) {
-			return j * 20;
+			return j * 30;
 		})
-		.attr("height", 19)
-		.attr("width", 19)
+		.attr("height", 29)
+		.attr("width", 29)
 		.attr("fill", (d) => {
 			if (d == Map.wall) {
 				return "gray";
@@ -55,5 +56,12 @@ async function render(map) {
 				return "yellow";
 			}
 		});
-	await sleep(30);
+	await sleep(speed);
+}
+
+render(Map.grid_map);
+
+function setSpeed(spd){
+	speed = spd
+	document.getElementById("speed-value").innerText = `Speed = ${speed}ms`
 }
