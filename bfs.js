@@ -6,17 +6,17 @@ let bfsParent = { [[2, 1]]: null };
 // Start Node
 bfsQueue.push([2, 1]);
 
-function addNeighbors(coord) {
-	checkNeighbor([coord[0] - 1, coord[1]], coord);
+function bfsAddNeighbors(coord) {
+	bfsCheckNeighbor([coord[0] - 1, coord[1]], coord);
 
-	checkNeighbor([coord[0], coord[1] + 1], coord);
+	bfsCheckNeighbor([coord[0], coord[1] + 1], coord);
 
-	checkNeighbor([coord[0] + 1, coord[1]], coord);
+	bfsCheckNeighbor([coord[0] + 1, coord[1]], coord);
 
-	checkNeighbor([coord[0], coord[1] - 1], coord);
+	bfsCheckNeighbor([coord[0], coord[1] - 1], coord);
 }
 
-function checkNeighbor(coord, parentCoord) {
+function bfsCheckNeighbor(coord, parentCoord) {
 	const x = coord[1];
 	const y = coord[0];
 
@@ -43,7 +43,7 @@ function checkNeighbor(coord, parentCoord) {
 	bfsParent[coord] = parentCoord;
 }
 
-async function run() {
+async function bfsRun() {
 	bfsMap = JSON.parse(JSON.stringify(Map.grid_map));
 	bfsQueue = [];
 	bfsParent = { [[2, 1]]: null };
@@ -65,7 +65,7 @@ async function run() {
 		bfsMap[currCoord[0]][currCoord[1]] = Map.explored;
 		await render(bfsMap);
 
-		addNeighbors(currCoord);
+		bfsAddNeighbors(currCoord);
 	}
 
 	bfsMap[Map.startCoord[0]][Map.startCoord[1]] = Map.start;
@@ -82,7 +82,7 @@ async function getShortestPathBFS() {
 
 	document.getElementById("shortest-type").innerText = "BFS";
 	let path = [];
-	const goalCoord = await run();
+	const goalCoord = await bfsRun();
 
 	let currCoord = goalCoord;
 	while (currCoord) {

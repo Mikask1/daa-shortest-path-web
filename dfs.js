@@ -5,17 +5,17 @@ let dfsParent = { [[2, 1]]: null };
 // Start Node
 dfsStack.push([2, 1]);
 
-function addNeighbors(coord) {
-    checkNeighbor([coord[0] - 1, coord[1]], coord);
+function dfsAddNeighbors(coord) {
+    dfsCheckNeighbor([coord[0] - 1, coord[1]], coord);
 
-    checkNeighbor([coord[0], coord[1] + 1], coord);
+    dfsCheckNeighbor([coord[0], coord[1] + 1], coord);
 
-    checkNeighbor([coord[0] + 1, coord[1]], coord);
+    dfsCheckNeighbor([coord[0] + 1, coord[1]], coord);
 
-    checkNeighbor([coord[0], coord[1] - 1], coord);
+    dfsCheckNeighbor([coord[0], coord[1] - 1], coord);
 }
 
-function checkNeighbor(coord, parentCoord) {
+function dfsCheckNeighbor(coord, parentCoord) {
     const x = coord[1];
     const y = coord[0];
 
@@ -41,7 +41,7 @@ function checkNeighbor(coord, parentCoord) {
     dfsParent[coord] = parentCoord;
 }
 
-async function run() {
+async function dfsRun() {
     dfsMap = JSON.parse(JSON.stringify(Map.grid_map));
     dfsStack = [];
     dfsParent = { [[2, 1]]: null };
@@ -63,7 +63,7 @@ async function run() {
         dfsMap[currCoord[0]][currCoord[1]] = Map.explored;
         await render(dfsMap);
 
-        addNeighbors(currCoord);
+        dfsAddNeighbors(currCoord);
     }
 
     dfsMap[Map.startCoord[0]][Map.startCoord[1]] = Map.start;
@@ -80,7 +80,7 @@ async function getShortestPathDFS() {
 
     document.getElementById("shortest-type").innerText = "DFS";
     let path = [];
-    const goalCoord = await run();
+    const goalCoord = await dfsRun();
 
     let currCoord = goalCoord;
     while (currCoord) {
