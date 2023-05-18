@@ -7,6 +7,7 @@ function heuristic(node, goal) {
 
 async function astarSearch() {
 	var btns = document.getElementsByClassName("btn-fancy");
+	document.getElementById("shortest-type").innerText = "A*";
 
 	for (var i = 0; i < btns.length; i++) {
 		btns[i].disabled = true;
