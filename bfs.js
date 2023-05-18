@@ -1,10 +1,10 @@
-let map = [];
+let bfsMap = [];
 
-let queue = [];
-let parent = { [[2, 1]]: null };
+let bfsQueue = [];
+let bfsParent = { [[2, 1]]: null };
 
 // Start Node
-queue.push([2, 1]);
+bfsQueue.push([2, 1]);
 
 function addNeighbors(coord) {
 	checkNeighbor([coord[0] - 1, coord[1]], coord);
@@ -20,13 +20,13 @@ function checkNeighbor(coord, parentCoord) {
 	const x = coord[1];
 	const y = coord[0];
 
-	// console.log(coord, queue);
+	// console.log(coord, bfsQueue);
 	if (x >= Map.xLength) return false;
 	if (x < 0) return false;
 	if (y >= Map.yLength) return false;
 	if (y < 0) return false;
 
-	const coordValue = map[y][x];
+	const coordValue = bfsMap[y][x];
 	if (
 		coordValue != Map.path &&
 		coordValue != Map.goal &&
@@ -35,40 +35,40 @@ function checkNeighbor(coord, parentCoord) {
 		return false;
 	}
 
-	queue.push(coord);
+	bfsQueue.push(coord);
 
 	if (coordValue != Map.goal) {
-		map[coord[0]][coord[1]] = Map.open;
+		bfsMap[coord[0]][coord[1]] = Map.open;
 	}
-	parent[coord] = parentCoord;
+	bfsParent[coord] = parentCoord;
 }
 
 async function run() {
-	map = JSON.parse(JSON.stringify(Map.grid_map));
-	queue = [];
-	parent = { [[2, 1]]: null };
+	bfsMap = JSON.parse(JSON.stringify(Map.grid_map));
+	bfsQueue = [];
+	bfsParent = { [[2, 1]]: null };
 
 	// Start Node
-	queue.push([2, 1]);
+	bfsQueue.push([2, 1]);
 	goalCoord = [];
 
-	await render(map);
-	while (queue.length) {
-		const currCoord = queue.shift();
-		const currValue = map[currCoord[0]][currCoord[1]];
+	await render(bfsMap);
+	while (bfsQueue.length) {
+		const currCoord = bfsQueue.shift();
+		const currValue = bfsMap[currCoord[0]][currCoord[1]];
 
 		if (currValue == Map.goal) {
 			goalCoord = currCoord;
 			break;
 		}
 
-		map[currCoord[0]][currCoord[1]] = Map.explored;
-		await render(map);
+		bfsMap[currCoord[0]][currCoord[1]] = Map.explored;
+		await render(bfsMap);
 
 		addNeighbors(currCoord);
 	}
 
-	map[Map.startCoord[0]][Map.startCoord[1]] = Map.start;
+	bfsMap[Map.startCoord[0]][Map.startCoord[1]] = Map.start;
 	running = false;
 	return goalCoord;
 }
@@ -87,18 +87,18 @@ async function getShortestPathBFS() {
 	let currCoord = goalCoord;
 	while (currCoord) {
 		path.push(currCoord);
-		currCoord = parent[currCoord];
+		currCoord = bfsParent[currCoord];
 	}
 	path.reverse();
 	// Tandai path menjadi -2
 	for (const coord of path) {
-		map[coord[0]][coord[1]] = Map.shortest;
-		await render(map);
+		bfsMap[coord[0]][coord[1]] = Map.shortest;
+		await render(bfsMap);
 	}
 
-	map[goalCoord[0]][goalCoord[1]] = Map.goal;
-	map[Map.startCoord[0]][Map.startCoord[1]] = Map.start;
-	await render(map);
+	bfsMap[goalCoord[0]][goalCoord[1]] = Map.goal;
+	bfsMap[Map.startCoord[0]][Map.startCoord[1]] = Map.start;
+	await render(bfsMap);
 
 	for (var i = 0; i < btns.length; i++) {
 		btns[i].disabled = false;
